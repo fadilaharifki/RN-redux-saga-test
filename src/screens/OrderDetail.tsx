@@ -97,9 +97,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  containerProductDetail:{
-    gap:8
-  }
+  containerProductDetail: {
+    gap: 8,
+  },
 });
 
 export default OrderDetailScreen;

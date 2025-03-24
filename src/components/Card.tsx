@@ -1,6 +1,6 @@
 import {StyleSheet, View} from 'react-native';
 import CustomText from './CustomText';
-import ButtonComponent from './ButtonComponent';
+import CustomButton from './CustomButton';
 import colors from '../theme/color';
 import {getFontFamily} from '../theme/typography';
 import HorizontalLine from './HorizontalLine';
@@ -13,7 +13,10 @@ import {StackNavigationProp} from '@react-navigation/stack';
 
 type OrderNavigationProp = StackNavigationProp<RootStackParamList>;
 
-const Card = () => {
+interface CardProps {
+  onDelete?: (id: string) => void;
+}
+const Card = ({onDelete}: CardProps) => {
   const navigation = useNavigation<OrderNavigationProp>();
   return (
     <View style={styles.containerCard}>
@@ -40,20 +43,25 @@ const Card = () => {
           <CustomText>13/03/2021 10:43</CustomText>
         </View>
         <Space />
-        <View style={styles.containerButton}>
-          <ButtonComponent
+        <View style={styles.buttonGroup}>
+          <CustomButton
             textStyle={{fontSize: 18}}
             title="Edit"
             variant="solid"
             onPress={() => navigation.navigate('OrderMenage', {orderId: ''})}
           />
-          <ButtonComponent
+          <CustomButton
             textStyle={{fontSize: 18}}
             title="Detail"
             variant="outline"
             onPress={() => navigation.navigate('OrderDetail', {orderId: ''})}
           />
           <IconButton
+            onPress={() => {
+              if (typeof onDelete === 'function') {
+                onDelete('dsd');
+              }
+            }}
             styleContainer={styles.trashBtn}
             name="trash-can"
             color={colors.error}
@@ -87,7 +95,7 @@ const styles = StyleSheet.create({
   containerValue: {
     gap: 8,
   },
-  containerButton: {
+  buttonGroup: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     gap: 8,

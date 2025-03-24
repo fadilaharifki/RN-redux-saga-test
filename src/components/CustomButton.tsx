@@ -1,4 +1,4 @@
-import {StyleSheet, TextStyle, TouchableOpacity} from 'react-native';
+import {StyleSheet, TextStyle, TouchableOpacity, ViewStyle} from 'react-native';
 import CustomText from './CustomText';
 import colors from '../theme/color';
 
@@ -7,25 +7,40 @@ interface ButtonProps {
   variant?: 'solid' | 'outline';
   onPress: () => void;
   textStyle?: TextStyle;
+  buttonContainerStyle?: ViewStyle;
+  color?: 'error' | 'info' | 'warning' | 'primary' | 'success' | 'blueDark';
 }
 
-const ButtonComponent: React.FC<ButtonProps> = ({
+const CustomButton: React.FC<ButtonProps> = ({
   title,
   variant = 'solid',
+  color = 'blueDark',
   onPress,
   textStyle,
+  buttonContainerStyle,
 }) => {
+  const buttonColorStyle =
+    variant === 'outline'
+      ? {borderColor: colors[color]}
+      : {backgroundColor: colors[color]};
+
+  const textColorStyle =
+    variant === 'outline' ? {color: colors[color]} : {color: 'white'};
+
   return (
     <TouchableOpacity
       style={[
         styles.button,
         variant === 'outline' ? styles.outline : styles.solid,
+        buttonColorStyle,
+        buttonContainerStyle,
       ]}
       onPress={onPress}>
       <CustomText
         style={[
           styles.text,
           variant === 'outline' ? styles.textOutline : styles.textSolid,
+          textColorStyle,
           textStyle,
         ]}>
         {title}
@@ -44,7 +59,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   solid: {
-    backgroundColor: colors.blueButton,
+    backgroundColor: colors.blueDark,
   },
   outline: {
     borderWidth: 2,
@@ -63,4 +78,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ButtonComponent;
+export default CustomButton;

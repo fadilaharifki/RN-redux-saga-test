@@ -48,7 +48,7 @@ const Card = ({onDelete}: CardProps) => {
             textStyle={{fontSize: 18}}
             title="Edit"
             variant="solid"
-            onPress={() => navigation.navigate('OrderMenage', {orderId: ''})}
+            onPress={() => navigation.navigate('OrderMenage', {type: 'edit'})}
           />
           <CustomButton
             textStyle={{fontSize: 18}}

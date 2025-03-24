@@ -7,7 +7,7 @@ interface IconButtonProps {
   name: string;
   size?: number;
   color?: string;
-  styleContainer?: ViewStyle;
+  styleContainer?: ViewStyle | ViewStyle[];
   onPress?: () => void;
 }
 

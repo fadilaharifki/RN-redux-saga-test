@@ -1,8 +1,4 @@
-import {
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-} from 'react-native';
+import {FlatList, SafeAreaView, StyleSheet} from 'react-native';
 import Card from '../components/Card';
 
 const OrderListScreen = () => {
@@ -24,10 +20,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flex: 1,
   },
-  containerFlatList:{
+  containerFlatList: {
     padding: 20,
-    gap: 16
-  }
+    gap: 16,
+  },
 });
 
 export default OrderListScreen;

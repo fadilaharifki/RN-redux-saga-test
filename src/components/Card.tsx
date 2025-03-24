@@ -7,8 +7,14 @@ import HorizontalLine from './HorizontalLine';
 import {formatNumber} from '../utils/formatNumber';
 import IconButton from './IconButton';
 import Space from './Space';
+import {useNavigation} from '@react-navigation/native';
+import {RootStackParamList} from '../navigation/AppNavigator';
+import {StackNavigationProp} from '@react-navigation/stack';
+
+type OrderNavigationProp = StackNavigationProp<RootStackParamList>;
 
 const Card = () => {
+  const navigation = useNavigation<OrderNavigationProp>();
   return (
     <View style={styles.containerCard}>
       <View style={styles.containerValue}>
@@ -39,13 +45,13 @@ const Card = () => {
             textStyle={{fontSize: 18}}
             title="Edit"
             variant="solid"
-            onPress={() => console.log('Edit')}
+            onPress={() => navigation.navigate('OrderMenage', {orderId: ''})}
           />
           <ButtonComponent
             textStyle={{fontSize: 18}}
             title="Detail"
             variant="outline"
-            onPress={() => console.log('Detail')}
+            onPress={() => navigation.navigate('OrderDetail', {orderId: ''})}
           />
           <IconButton
             styleContainer={styles.trashBtn}

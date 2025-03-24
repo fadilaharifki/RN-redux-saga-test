@@ -5,6 +5,7 @@ const colors = {
   blueButton: '#052A49',
   grayBorder: '#E0E0E0',
   error: '#FF0000',
+  grayTextTitle: '#828282',
 };
 
 export default colors;

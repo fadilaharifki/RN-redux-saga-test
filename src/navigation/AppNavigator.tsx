@@ -5,10 +5,11 @@ import OrderListScreen from '../screens/OrderList';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import IconButton from '../components/IconButton';
 import colors from '../theme/color';
+import OrderDetailScreen from '../screens/OrderDetail';
 
 export type RootStackParamList = {
   OrderList: undefined;
-  OrderMenage: undefined;
+  OrderMenage: {orderId: string};
   OrderDetail: {orderId: string};
 };
 
@@ -33,6 +34,19 @@ const AppNavigation = () => {
           options={({navigation}) => ({
             title: 'Order',
             headerLeft: () => <IconButton name="plus" color={colors.blueSky} />,
+          })}
+        />
+        <Stack.Screen
+          name="OrderDetail"
+          component={OrderDetailScreen}
+          options={({navigation}) => ({
+            title: 'Detail Order',
+            headerLeft: () => (
+              <IconButton
+                onPress={() => navigation.goBack()}
+                name="arrow-left-long"
+              />
+            ),
           })}
         />
       </Stack.Navigator>

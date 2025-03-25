@@ -10,37 +10,42 @@ import Space from './Space';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../navigation/AppNavigator';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {OrderInterface} from '../interface/OrderInterface';
+import {format} from 'date-fns';
 
 type OrderNavigationProp = StackNavigationProp<RootStackParamList>;
 
 interface CardProps {
   onDelete?: (id: string) => void;
+  item: OrderInterface;
 }
-const Card = ({onDelete}: CardProps) => {
+const Card = ({item, onDelete}: CardProps) => {
   const navigation = useNavigation<OrderNavigationProp>();
   return (
     <View style={styles.containerCard}>
       <View style={styles.containerValue}>
         <CustomText style={styles.textOrderID}>Order Id</CustomText>
-        <CustomText style={styles.textNumberOrder}>10981234566</CustomText>
+        <CustomText style={styles.textNumberOrder}>{item.id}</CustomText>
       </View>
       <HorizontalLine />
       <View style={styles.containerValue}>
         <View style={styles.rowText}>
           <CustomText>Customer</CustomText>
-          <CustomText>Anugrah Store</CustomText>
+          <CustomText>{item.customer_name}</CustomText>
         </View>
         <View style={styles.rowText}>
           <CustomText>Total Products</CustomText>
-          <CustomText>{formatNumber(1541000)}</CustomText>
+          <CustomText>{formatNumber(item.total_products)}</CustomText>
         </View>
         <View style={styles.rowText}>
           <CustomText>Total Price</CustomText>
-          <CustomText>{formatNumber(4541000)}</CustomText>
+          <CustomText>{formatNumber(item.total_price)}</CustomText>
         </View>
         <View style={styles.rowText}>
           <CustomText>Order Date</CustomText>
-          <CustomText>13/03/2021 10:43</CustomText>
+          <CustomText>
+            {format(new Date(item.created_at), 'dd/MM/yyyy HH:mm')}
+          </CustomText>
         </View>
         <Space />
         <View style={styles.buttonGroup}>
@@ -54,12 +59,14 @@ const Card = ({onDelete}: CardProps) => {
             textStyle={{fontSize: 18}}
             title="Detail"
             variant="outline"
-            onPress={() => navigation.navigate('OrderDetail', {orderId: ''})}
+            onPress={() =>
+              navigation.navigate('OrderDetail', {orderId: item.id})
+            }
           />
           <IconButton
             onPress={() => {
               if (typeof onDelete === 'function') {
-                onDelete('dsd');
+                onDelete(item.id);
               }
             }}
             styleContainer={styles.trashBtn}

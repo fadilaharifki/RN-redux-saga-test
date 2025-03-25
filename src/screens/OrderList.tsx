@@ -1,28 +1,106 @@
-import {Button, FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
+import {
+  
+  FlatList,
+  RefreshControl,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import Card from '../components/Card';
 import ModalComponent from '../components/ModalComponent';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import CustomText from '../components/CustomText';
 import CustomButton from '../components/CustomButton';
+import {
+  useDeleteOrderByIdMutation,
+  useGetOrdersQuery,
+} from '../stores/services/orderApi';
+import SkeletonCard from '../components/skeleton/SkeletonCard';
+import LoadingModal from '../components/Loading';
 
 const OrderListScreen = () => {
+
+  const [page, setPage] = useState(1);
+  const limit = 10;
+
+  const {data, isFetching, isLoading, refetch} = useGetOrdersQuery({
+    page,
+    limit,
+  });
+
+  const [deleteOrderById, {isLoading: isLoadingDelete, isSuccess}] =
+    useDeleteOrderByIdMutation();
+
   const [modalVisible, setModalVisible] = useState(false);
+  const [idDelete, setIdDelete] = useState<null | number | string>(null);
+  const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setPage(1);
+
+      setTimeout(() => {
+        refetch();
+      }, 500);
+    }
+  }, [isSuccess]);
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setPage(1);
+
+    setTimeout(() => {
+      refetch()
+        .then(() => {
+          setRefreshing(false);
+        })
+        .finally(() => {
+          setRefreshing(false);
+        });
+    }, 500);
+  };
+
+  const handleLoadMore = () => {
+    if (
+      !isFetching &&
+      !isLoading &&
+      data?.list?.length &&
+      page < Math.ceil(data.total / limit)
+    ) {
+      setPage(prev => prev + 1);
+    }
+  };
 
   const toggleModal = () => setModalVisible(!modalVisible);
+
   return (
     <SafeAreaView style={styles.container}>
+      {isLoadingDelete && (
+        <LoadingModal
+          isVisible={isLoadingDelete}
+          message="Please wait, processing..."
+        />
+      )}
       <FlatList
-        data={[1, 3, 4, 5]}
+        data={data?.list ?? []}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => (
           <Card
+            item={item}
             onDelete={id => {
               setModalVisible(true);
+              setIdDelete(id);
             }}
           />
         )}
         contentContainerStyle={styles.containerFlatList}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.8}
+        ListFooterComponent={isFetching || isLoading ? <SkeletonCard /> : null}
       />
 
       <ModalComponent
@@ -36,7 +114,12 @@ const OrderListScreen = () => {
               title="Yes, delete i"
               variant="outline"
               color="error"
-              onPress={() => {}}
+              onPress={() => {
+                if (idDelete) {
+                  toggleModal();
+                  deleteOrderById({id: idDelete});
+                }
+              }}
             />
             <CustomButton
               buttonContainerStyle={styles.btn}

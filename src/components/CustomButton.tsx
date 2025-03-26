@@ -9,6 +9,7 @@ interface ButtonProps {
   textStyle?: TextStyle;
   buttonContainerStyle?: ViewStyle;
   color?: 'error' | 'info' | 'warning' | 'primary' | 'success' | 'blueDark';
+  disable?: boolean;
 }
 
 const CustomButton: React.FC<ButtonProps> = ({
@@ -18,6 +19,7 @@ const CustomButton: React.FC<ButtonProps> = ({
   onPress,
   textStyle,
   buttonContainerStyle,
+  disable = false,
 }) => {
   const buttonColorStyle =
     variant === 'outline'
@@ -29,11 +31,13 @@ const CustomButton: React.FC<ButtonProps> = ({
 
   return (
     <TouchableOpacity
+      disabled={disable}
       style={[
         styles.button,
         variant === 'outline' ? styles.outline : styles.solid,
         buttonColorStyle,
         buttonContainerStyle,
+        disable ? styles.disableStyle : null,
       ]}
       onPress={onPress}>
       <CustomText
@@ -75,6 +79,9 @@ const styles = StyleSheet.create({
   },
   textOutline: {
     color: colors.blueSky,
+  },
+  disableStyle: {
+    backgroundColor: colors.grayBorder,
   },
 });
 

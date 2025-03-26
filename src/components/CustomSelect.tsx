@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Control, ControllerRenderProps, useController} from 'react-hook-form';
 import {
   View,
@@ -54,6 +54,13 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   );
   const fieldWithOnChange = field as ControllerRenderProps<any, string>;
 
+  useEffect(() => {
+    const selectedProduct = options.find(
+      p => p.value.toString() === field.value,
+    );
+    setSelectedLabel(selectedProduct?.label as string);
+  }, [field.value]);
+
   const handleOnchange = (option: {label: string; value: string}) => {
     if (option) {
       fieldWithOnChange.onChange(option.value);
@@ -73,7 +80,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
       </View>
       <TouchableOpacity
         onPress={() => setModalVisible(true)}
-        style={styles.selectButton}>
+        style={[styles.selectButton, error && {borderColor: colors.error}]}>
         <CustomText style={styles.selectButtonText}>
           {selectedLabel || placeholder}
         </CustomText>

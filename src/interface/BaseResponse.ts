@@ -3,4 +3,5 @@ interface APIResponse<T> {
   limit: number;
   total: number;
   list: Array<T>;
+  data: Array<T>;
 }

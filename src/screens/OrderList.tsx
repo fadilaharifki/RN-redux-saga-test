@@ -1,5 +1,4 @@
 import {
-  
   FlatList,
   RefreshControl,
   SafeAreaView,
@@ -19,7 +18,6 @@ import SkeletonCard from '../components/skeleton/SkeletonCard';
 import LoadingModal from '../components/Loading';
 
 const OrderListScreen = () => {
-
   const [page, setPage] = useState(1);
   const limit = 10;
 

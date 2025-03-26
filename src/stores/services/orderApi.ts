@@ -43,7 +43,7 @@ export const orderApi = createApi({
         return currentArg?.page !== previousArg?.page;
       },
     }),
-    getOrderById: builder.query<OrderByIdInterface, {id: string | number}>({
+    getOrderById: builder.query<OrderByIdInterface, {id?: string | number}>({
       query: ({id}) => ({
         url: `/order/${id}`,
         method: 'GET',
@@ -77,11 +77,55 @@ export const orderApi = createApi({
     }),
     createOrder: builder.mutation<OrderInterface, Partial<OrderInterface>>({
       query: newOrder => ({
-        url: '/orders',
+        url: '/order',
         method: 'POST',
         data: newOrder,
       }),
       invalidatesTags: ['Orders'],
+      onQueryStarted: async (_order, {queryFulfilled}) => {
+        try {
+          await queryFulfilled;
+          Toast.show({
+            type: 'success',
+            text1: 'Success Create Order',
+            text2: 'The order has been successfully created!',
+          });
+        } catch (error: any) {
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: error?.error?.message || 'Failed to create the order!',
+          });
+        }
+      },
+    }),
+
+    updateOrder: builder.mutation<
+      OrderInterface,
+      {order_id: string; data: Partial<OrderInterface>}
+    >({
+      query: ({order_id, data}) => ({
+        url: `/order/${order_id}`,
+        method: 'PUT',
+        data,
+      }),
+      invalidatesTags: ['Orders'],
+      onQueryStarted: async (_order, {queryFulfilled}) => {
+        try {
+          await queryFulfilled;
+          Toast.show({
+            type: 'success',
+            text1: 'Success Update Order',
+            text2: 'The order has been successfully updated!',
+          });
+        } catch (error: any) {
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: error?.error?.message || 'Failed to update the order!',
+          });
+        }
+      },
     }),
   }),
 });
@@ -91,4 +135,5 @@ export const {
   useGetOrderByIdQuery,
   useDeleteOrderByIdMutation,
   useCreateOrderMutation,
+  useUpdateOrderMutation,
 } = orderApi;

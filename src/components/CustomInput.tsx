@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {TextInput, View, Text, StyleSheet, ViewStyle} from 'react-native';
 import colors from '../theme/color';
 import {useController, Control, ControllerRenderProps} from 'react-hook-form';
@@ -17,6 +17,7 @@ interface CustomInputProps {
   type?: 'text' | 'number';
   isFormatNumber?: boolean;
   customStyleInput?: ViewStyle;
+  disable?: boolean;
 }
 
 const CustomInput: React.FC<CustomInputProps> = ({
@@ -31,20 +32,20 @@ const CustomInput: React.FC<CustomInputProps> = ({
   type = 'text',
   isFormatNumber = false,
   customStyleInput,
+  disable,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
   const {
     field,
     fieldState: {invalid, error},
-    formState: {touchedFields},
   } = control
     ? useController({
         name,
         control,
         rules,
       })
-    : {field: {value}, fieldState: {}, formState: {}};
+    : {field: {value}, fieldState: {}};
 
   const fieldWithOnChange = field as ControllerRenderProps<any, string>;
 
@@ -56,6 +57,12 @@ const CustomInput: React.FC<CustomInputProps> = ({
       onChange(text);
     }
   };
+
+  useEffect(() => {
+    if (value) {
+      fieldWithOnChange.onChange(value);
+    }
+  }, [value]);
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -77,7 +84,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
           styles.inputContainer,
           isFocused && {borderColor: colors.blueSky},
           invalid && styles.inputError,
-          !rules?.required && {backgroundColor: colors.grayBorder},
+          disable && {backgroundColor: colors.grayBorder},
           customStyleInput,
         ]}>
         {prefix && field.value && (
@@ -95,6 +102,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
           keyboardType={type === 'number' ? 'numeric' : 'default'}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          editable={!disable}
         />
       </View>
 

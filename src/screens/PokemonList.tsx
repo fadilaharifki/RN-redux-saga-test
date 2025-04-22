@@ -12,7 +12,6 @@ const PokemonListScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   const {data, isLoading} = useSelector((state: RootState) => state.pokemon);
-  console.log(data, '???????');
 
   useEffect(() => {
     const offset = (page - 1) * limit;

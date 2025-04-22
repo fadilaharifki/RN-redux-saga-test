@@ -1,4 +1,4 @@
-package com.rn_saga
+package com.test_rn
 
 import android.app.Application
 import com.facebook.react.PackageList

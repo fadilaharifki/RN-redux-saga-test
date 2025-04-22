@@ -1,13 +1,5 @@
-import {
-  FlatList,
-  RefreshControl,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {FlatList, RefreshControl, SafeAreaView, StyleSheet} from 'react-native';
 import Card from '../components/Card';
-import SkeletonCard from '../components/skeleton/SkeletonCard';
 import {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../stores/store';

@@ -1,83 +1,39 @@
 import {StyleSheet, View} from 'react-native';
 import CustomText from './CustomText';
-import CustomButton from './CustomButton';
 import colors from '../theme/color';
-import {getFontFamily} from '../theme/typography';
 import HorizontalLine from './HorizontalLine';
-import {formatNumber} from '../utils/formatNumber';
-import IconButton from './IconButton';
-import Space from './Space';
-import {useNavigation} from '@react-navigation/native';
-import {RootStackParamList} from '../navigation/AppNavigator';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {OrderInterface} from '../interface/OrderInterface';
-import {format} from 'date-fns';
-
-type OrderNavigationProp = StackNavigationProp<RootStackParamList>;
-
+import {Pokemon} from '../interface/PokemonsInterface';
+import {useState} from 'react';
+import SkeletonImage from './skeleton/SkeletonImage';
+import FastImage from 'react-native-fast-image';
 interface CardProps {
-  onDelete?: (id: string) => void;
-  item: OrderInterface;
+  item: Pokemon;
 }
-const Card = ({item, onDelete}: CardProps) => {
-  const navigation = useNavigation<OrderNavigationProp>();
+
+const Card = ({item}: CardProps) => {
+  const [loading, setLoading] = useState(true);
+
   return (
     <View style={styles.containerCard}>
       <View style={styles.containerValue}>
-        <CustomText style={styles.textOrderID}>Order Id</CustomText>
-        <CustomText style={styles.textNumberOrder}>{item.id}</CustomText>
+        <View style={{alignItems: 'center'}}>
+          {loading && <SkeletonImage width="100%" height={200} />}
+          <FastImage
+            style={[styles.image, loading && {display: 'none'}]}
+            source={{
+              uri: item.detail.image,
+              priority: FastImage.priority.normal,
+            }}
+            resizeMode={FastImage.resizeMode.contain}
+            onLoad={() => setLoading(false)}
+          />
+        </View>
       </View>
       <HorizontalLine />
       <View style={styles.containerValue}>
         <View style={styles.rowText}>
-          <CustomText>Customer</CustomText>
-          <CustomText>{item.customer_name}</CustomText>
-        </View>
-        <View style={styles.rowText}>
-          <CustomText>Total Products</CustomText>
-          <CustomText>{formatNumber(item.total_products)}</CustomText>
-        </View>
-        <View style={styles.rowText}>
-          <CustomText>Total Price</CustomText>
-          <CustomText>{formatNumber(item.total_price)}</CustomText>
-        </View>
-        <View style={styles.rowText}>
-          <CustomText>Order Date</CustomText>
-          <CustomText>
-            {format(new Date(item.created_at), 'dd/MM/yyyy HH:mm')}
-          </CustomText>
-        </View>
-        <Space />
-        <View style={styles.buttonGroup}>
-          <CustomButton
-            textStyle={{fontSize: 18}}
-            title="Edit"
-            variant="solid"
-            onPress={() =>
-              navigation.navigate('OrderMenage', {
-                type: 'edit',
-                orderId: item.id,
-              })
-            }
-          />
-          <CustomButton
-            textStyle={{fontSize: 18}}
-            title="Detail"
-            variant="outline"
-            onPress={() =>
-              navigation.navigate('OrderDetail', {orderId: item.id})
-            }
-          />
-          <IconButton
-            onPress={() => {
-              if (typeof onDelete === 'function') {
-                onDelete(item.id);
-              }
-            }}
-            styleContainer={styles.trashBtn}
-            name="trash-can"
-            color={colors.error}
-          />
+          <CustomText>Name</CustomText>
+          <CustomText>{item.name}</CustomText>
         </View>
       </View>
     </View>
@@ -91,14 +47,6 @@ const styles = StyleSheet.create({
     borderColor: colors.grayBorder,
     padding: 16,
   },
-  textOrderID: {
-    fontFamily: getFontFamily('500'),
-    fontSize: 14,
-  },
-  textNumberOrder: {
-    fontFamily: getFontFamily('700'),
-    fontSize: 14,
-  },
   rowText: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -107,16 +55,9 @@ const styles = StyleSheet.create({
   containerValue: {
     gap: 8,
   },
-  buttonGroup: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 8,
-  },
-  trashBtn: {
-    borderWidth: 1,
-    borderColor: colors.grayBorder,
-    borderRadius: 5,
-    aspectRatio: 1 / 1,
+  image: {
+    width: 200,
+    height: 200,
   },
 });
 

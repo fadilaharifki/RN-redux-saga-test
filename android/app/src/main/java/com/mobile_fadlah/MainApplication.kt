@@ -1,4 +1,4 @@
-package com.mobile_fadlah
+package com.rn_saga
 
 import android.app.Application
 import com.facebook.react.PackageList

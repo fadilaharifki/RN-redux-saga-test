@@ -1,17 +1,21 @@
 import {configureStore} from '@reduxjs/toolkit';
-import {orderApi} from './services/orderApi';
-import {productApi} from './services/productAPI';
+import createSagaMiddleware from 'redux-saga';
+import pokemonReducer from './slices/pokemonSlice';
+import rootSaga from './sagas';
+import logger from 'redux-logger';
+
+const sagaMiddleware = createSagaMiddleware();
 
 export const store = configureStore({
   reducer: {
-    [orderApi.reducerPath]: orderApi.reducer,
-    [productApi.reducerPath]: productApi.reducer,
+    pokemon: pokemonReducer,
   },
   middleware: getDefaultMiddleware =>
-    getDefaultMiddleware()
-      .concat(orderApi.middleware)
-      .concat(productApi.middleware),
+    getDefaultMiddleware().concat(sagaMiddleware).concat(logger),
+  devTools: process.env.NODE_ENV !== 'production',
 });
+
+sagaMiddleware.run(rootSaga);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

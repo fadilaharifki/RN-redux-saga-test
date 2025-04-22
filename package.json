@@ -1,5 +1,5 @@
 {
-  "name": "mobile_fadlah",
+  "name": "rn_saga",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -17,7 +17,7 @@
     "@hookform/resolvers": "^4.1.3",
     "@react-navigation/native": "^7.0.18",
     "@react-navigation/stack": "^7.2.2",
-    "@reduxjs/toolkit": "^2.6.1",
+    "@reduxjs/toolkit": "^2.7.0",
     "@types/react-redux": "^7.1.34",
     "axios": "^1.8.4",
     "date-fns": "^4.1.0",
@@ -26,6 +26,7 @@
     "react": "19.0.0",
     "react-hook-form": "^7.54.2",
     "react-native": "0.78.1",
+    "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "^2.24.0",
     "react-native-reanimated": "^3.17.1",
     "react-native-safe-area-context": "^5.3.0",
@@ -34,6 +35,9 @@
     "react-native-toast-message": "^2.2.1",
     "react-native-vector-icons": "^10.2.0",
     "react-redux": "^9.2.0",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-logger": "^3.0.6",
+    "redux-saga": "^1.3.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {
@@ -51,6 +55,7 @@
     "@types/react": "^19.0.0",
     "@types/react-native-vector-icons": "^6.4.18",
     "@types/react-test-renderer": "^19.0.0",
+    "@types/redux-logger": "^3.0.13",
     "babel-plugin-module-resolver": "^5.0.2",
     "eslint": "^9.23.0",
     "eslint-config-prettier": "^10.1.1",

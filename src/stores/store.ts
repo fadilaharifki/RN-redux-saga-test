@@ -1,15 +1,12 @@
 import {configureStore} from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
-import pokemonReducer from './slices/pokemonSlice';
 import rootSaga from './sagas';
 import logger from 'redux-logger';
 
 const sagaMiddleware = createSagaMiddleware();
 
 export const store = configureStore({
-  reducer: {
-    pokemon: pokemonReducer,
-  },
+  reducer: {},
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware().concat(sagaMiddleware).concat(logger),
   devTools: process.env.NODE_ENV !== 'production',
